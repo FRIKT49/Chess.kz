@@ -949,6 +949,7 @@ function findBlockersCheck(startCol,startRow,diff,color) {
     }else if(diff == 'vp'){
         x++;
         y++;
+        //sassasa
     }else if(diff == 'np'){
         x++;
         y--;
