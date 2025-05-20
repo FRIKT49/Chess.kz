@@ -271,7 +271,7 @@ for (let figure in whitePieces) {
 
 
             kingIsNotUnderAttack('black', vozmoznieHodi)
-
+            findKingPins(allHodi,'white')
         })
         
 
@@ -352,8 +352,9 @@ for (let figure in blackPieces) {
             })
             obrabotchikVozmoznichDvijeni()
             obrabotchikVsehDvijeni()
-            findKingPins(allHodi,'black')
+            
             kingIsNotUnderAttack('black', vozmoznieHodi)
+            findKingPins(allHodi,'black')
             //    -----------------------------------------------------------------------------------------------
             if (yourTurn == 'black') {
                 if (pickCords[2]) {
@@ -487,7 +488,7 @@ for (let figure in blackPieces) {
 
 
             kingIsNotUnderAttack('white', vozmoznieHodi)
-
+            findKingPins(allHodi,'white')
         })
 
 

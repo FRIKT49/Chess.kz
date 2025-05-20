@@ -768,7 +768,7 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
             });
         } else {
             // Логика для других фигур
-            console.log(vH);
+            // console.log(vH);
             
             vH.forEach(function (arr) {
                 if (arr[0].length != 0) {
@@ -785,6 +785,9 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
         }
         return isTrue;
     }else{
+        $('.'+color+'_king_1').css({
+            animation: 'kingRed 5s ease-in-out forwards'
+        });
         return false
     }
     
@@ -820,7 +823,7 @@ function checkDiagonalCheck([startCol,startRow],diff ,color) {
     }else if(diff == 'p'){
         x++
     }
-    console.log(x,y);
+    // console.log(x,y);
     
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
         const cell = $('.cell' + x + y);
@@ -853,7 +856,107 @@ function checkDiagonalCheck([startCol,startRow],diff ,color) {
     }
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
 }
+function getVHChange(piece,arrvH){
+    let pieceClass = piece.attr("class").split(" ")[0]
+    let pieceClassArr = pieceClass.split("_")
+    vozmoznieHodi.forEach(function (arr) {
+        
+        if(arr[1] == pieceClassArr[0] && arr[2] == pieceClassArr[1] && arr[3] == pieceClassArr[2]){
 
+            // console.log(arr);
+            // console.log(pieceClassArr);
+            arr[0] = arrvH
+            // console.log(vozmoznieHodi);
+            
+        }
+    })
+}
+function getVH(piece){
+    let vhPiece = null;
+    let pieceClass = piece.attr("class").split(" ")[0]
+    let pieceClassArr = pieceClass.split("_")
+    vozmoznieHodi.forEach(function (arr) {
+        
+        if(arr[1] == pieceClassArr[0] && arr[2] == pieceClassArr[1] && arr[3] == pieceClassArr[2]){
+
+            vhPiece = arr;
+            
+            
+        }
+    })
+    return vhPiece;
+}
+function findPiceHodi([startCol,startRow],diff,color) {
+    let y = parseInt(startRow) ;
+    let x = parseInt(startCol) ;
+    let figures = [];
+    if(diff == 'nl'){
+        x--;
+        y--;
+    }else if(diff == 'vp'){
+        x++;
+        y++;
+        //sassasa
+    }else if(diff == 'np'){
+        x++;
+        y--;
+    }else if(diff == 'vl'){
+        x--;
+        y++;
+    }else if(diff == 'n'){
+        y--
+    }else if(diff == 'v'){
+        y++
+    }else if(diff == 'l'){
+        x--
+    }else if(diff == 'p'){
+        x++
+    }
+    // console.log(x,y);
+    
+    while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
+        const cell = $('#id' + x +'' + y);
+        // console.log(cell);
+        // console.log(x,y);
+        
+        const cellClass = cell.attr('class');
+        // console.log(cell);
+        // console.log(cellClass.split(' ').length);
+
+        // console.log(x,y);
+        
+        
+                
+
+        figures.push('id'+x+y);
+            
+        
+        if(diff == 'nl'){
+            x--;
+            y--;
+        }else if(diff == 'vp'){
+            x++;
+            y++;
+        }else if(diff == 'np'){
+            x++;
+            y--;
+        }else if(diff == 'vl'){
+            x--;
+            y++;
+        }else if(diff == 'n'){
+            y--
+        }else if(diff == 'v'){
+            y++
+        }else if(diff == 'l'){
+            x--
+        }else if(diff == 'p'){
+            x++
+        }
+    }
+    console.log(figures);
+    
+    return figures; // Массив с найденной фигурой (или пустой, если не нашли)
+}
 function findKingPins(aH,color) {
     const kingCell = $(".cell_"+color+"_king_1");
     const kingCellId = kingCell.attr("id");
@@ -877,16 +980,16 @@ function findKingPins(aH,color) {
                 // console.log(id);
                 let diffx = attackPiecePosY - id[2]
                 let diffy = attackPiecePosX - id[3]
-                console.log(attackPiecePosY - id[2],attackPiecePosX-id[3]);
+                // console.log(attackPiecePosY - id[2],attackPiecePosX-id[3]);
                 if(diffx >0 && attackPiecePosX-id[3] >0){
-                    console.log('diagonal');
+                    // console.log('diagonal');
 
                     pos = 'nl'
                      
                     
                     //Значит это либо слон либо ферзь и король ниже левее
                 }else if(diffx<0 && diffy <0){
-                    console.log('diagonal');
+                    // console.log('diagonal');
                     pos = 'vp'
                     // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos ));
                     //Значит это либо слон либо ферзь и король выше правее
@@ -912,33 +1015,64 @@ function findKingPins(aH,color) {
                 
                 if(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos ,color).length > 0 && checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color ).length == 1 ){
 
-                    console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color ));
+                    // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color ));
                     let cantMove = checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color )
-                    let cantMoveFigure = cantMove[0]['cell']
-                    let cantMoveClass = cantMove[0]['cellClass'].split(" ");
-                    console.log(cantMoveClass);
+                    let possibleMoves =  getVH(cantMove[0]['cell'])[0]
+                    // console.log(possibleMoves);
+
+                    let posCM = [];
                     
-                    cantMoveFigure.attr("class", cantMoveClass[0] + ' ' + cantMoveClass[1] + ' ' + cantMoveClass[2] + ' ' + 'cantMove')
                     
+                    if(pos == 'nl'||pos == 'vp'){
+                        posCM = ['nl','vp']
+                    }else if(pos == 'np'||pos == 'vl'){
+                        posCM = ['np','vl']
+                    }else if(pos == 'n'||pos == 'v'){
+                        posCM = ['n','v']
+                    }else if(pos == 'l'||pos == 'p'){
+                        posCM = ['l','p']
+                    }
+                    // console.log(posCM);
+                    let defendPieceY = cantMove[0]['cell'].attr("class").split(" ")[2][4]
+                    let defendPieceX = cantMove[0]['cell'].attr("class").split(" ")[2][5]
+                    // console.log(defendPieceY,defendPieceX);
                     
-                }else{
-                    let cantMove = checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color )
-                    cantMove.forEach(function (cell) {
-                        let cantMoveFigure = cell['cell']
-                        let cantMoveClass = cell['cellClass'].split(" ");
-                        console.log(cantMoveFigure);
+                    let posCMARR = []
+                    
+                    posCM.forEach(function (arrCM) {
+                        // console.log(posCM);
+                        findPiceHodi([defendPieceY,defendPieceX],arrCM ,color).forEach(function(fph){
+                            posCMARR.push(fph)
+                        })
                         
-                        cantMoveFigure.attr("class", cantMoveClass[0] + ' ' + cantMoveClass[1] + ' ' + cantMoveClass[2] )
                     })
+                    // console.log(findPiceHodi([defendPieceY,defendPieceX],pos ,color));
+                    
+                    console.log(posCMARR);
+                    let heIsFind = []
+                    possibleMoves.forEach(function(idVH){
+                        // console.log(idVH,'--',posCMARR[0]);
+                        posCMARR.forEach(function(fph){
+                            if(idVH == fph){
+                                console.log('-------------------------');
+                                console.log(fph);
+                                heIsFind.push(fph)
+                            }
+                        })
+                        
+                    })
+                    
+                    // console.log(posCMARR);
+                     
+                    getVHChange(cantMove[0]['cell'],heIsFind)
+
                 }
-                
+
             }
         })
     })
 }
-function checkCellForAttack(cellId, color) {
 
-}
 function findBlockersCheck(startCol,startRow,diff,color) {
     let y = parseInt(startRow) ;
     let x = parseInt(startCol) ;
@@ -1094,21 +1228,20 @@ function kingIsNotUnderAttack(color, vH) {
                 // console.log(arr);
                 
                 if(!(arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2])&& figureClass[0] == color){
-                    figure.attr("class", figureClass[0] + '_' + figureClass[1] + '_' + figureClass[2] + ' figure '+figureCell +' '+ 'cantMove')
+                    // figure.attr("class", figureClass[0] + '_' + figureClass[1] + '_' + figureClass[2] + ' figure '+figureCell +' '+ 'cantMove')
+                    getVHChange(figure,[])
                 }else {
-
-                    figure.attr("class", figureClass[0] + '_' + figureClass[1] + '_' + figureClass[2] + ' figure '+figureCell)
-
-                    
                     vH.forEach(function (arrVH) {
-
                         if(arrVH[1] == arr[1]&& arrVH[2] == arr[2]&& arrVH[3] == arr[3]){
                             arrVH[0] = ['id'+arr[4]+arr[5]]
                         }
                     })
                 }
-                
+                if(kingIsUnderAttack == false){
+                   
+                }
             })
         })
     }
+
 }
