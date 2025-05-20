@@ -111,8 +111,8 @@ function calculatePossibleMoves(figureElement) {
                 currentCol
             );
             const intermediateRow = parseInt(currentRow) + parseInt(direction);
-            if (currentRow == startRow &&!isCellOccupied(intermediateRow, oneStepForwardCol) &&!isCellOccupied(twoStepsForwardRow, oneStepForwardCol)) {
-                if(!isCellOccupied(twoStepsForwardRow, oneStepForwardCol)&&!figureElement.attr("class").includes("moved")) {
+            if (currentRow == startRow && !isCellOccupied(intermediateRow, oneStepForwardCol) && !isCellOccupied(twoStepsForwardRow, oneStepForwardCol)) {
+                if (!isCellOccupied(twoStepsForwardRow, oneStepForwardCol) && !figureElement.attr("class").includes("moved")) {
                     possibleMoves.push(twoStepsForwardCellId);
                 }
             }
@@ -527,7 +527,8 @@ function obrabotchikVozmoznichDvijeni() {
 }
 
 function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, figureClone) {
-    if(!figureClone.attr("class").includes("cantMove")){
+    
+    if (!figureClone.attr("class").includes("cantMove")) {
         let canCastleWhiteRight = true;
         let canCastleWhiteLeft = true;
         let canCastleBlackRight = true;
@@ -540,10 +541,12 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
             hasMovedClass = false;
         }
 
+
+
         if (name === "king") {
             vH.forEach(function (arr) {
                 arr[0].forEach(function (id) {
-                    console.log(id[2] == 1 && id[3] == 5);
+                    // console.log(id[2] == 1 && id[3] == 5);
                     if (arr[1] == "black") {
                         if (
                             (id[2] == 1 && id[3] == 7) ||
@@ -551,7 +554,7 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
                             (id[2] == 1 && id[3] == 5)
                         ) {
                             canCastleWhiteRight = false;
-                            console.log("nepon");
+                            // console.log("nepon");
                         } else if (
                             (id[2] == 1 && id[3] == 3) ||
                             (id[2] == 1 && id[3] == 4) ||
@@ -583,21 +586,22 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
                     // console.log(canCastleWhiteRight+'    jaegjhiugaehiughaeuighaeuGHEAWUGEAH');
                     if (arr[1] === color && arr[2] === "king") {
                         if (arr[0]) {
-                            arr[0].forEach(function (id) {
-                                if (id[2] == y && id[3] == x) {
-                                    isTrue = true;
-                                }
-                            });
+                            if (arr[1] == color && arr[2] == name && arr[3] == i + 1) {
+                                arr[0].forEach(function (id) {
+                                    if (id[2] == y && id[3] == x) {
+                                        isTrue = true;
+                                    }
+                                });
+                            }
                             // console.log(canCastleWhiteRight+'    jaegjhiugaehiughaeuighaeuGHEAWUGEAH');
 
                             if (!hasMovedClass) {
+
+
                                 if (color === "white") {
-                                    console.log(
-                                        canCastleWhiteRight +
-                                        "    jaegjhiugaehiughaeuighaeuGHEAWUGEAH"
-                                    );
+
                                     if (canCastleWhiteRight) {
-                                        console.log(arr);
+
 
                                         if (
                                             y == 1 &&
@@ -606,7 +610,7 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
                                             !isCellOccupied(1, 6) &&
                                             !$(".white_rook_1").hasClass("moved")
                                         ) {
-                                            console.log("Короткая рокировка белых!");
+
 
                                             const whiteRook = $(".white_rook_2");
                                             const rookTargetCellId = "id16";
@@ -647,8 +651,8 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
                                             !$(".white_rook_2").hasClass("moved") &&
                                             canCastleWhiteLeft
                                         ) {
-                                            console.log("Длинная рокировка белых!");
-                                            // ВНИМАНИЕ: Немедленно перемещаем фигуры!
+
+
                                             const whiteRook = $(".white_rook_1");
                                             const rookTargetCellId = "id14";
                                             const rookTargetCell = $("#" + rookTargetCellId);
@@ -718,7 +722,7 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
                                     canCastleBlackLeft;
                                     // Длинная рокировка белых
                                     if (canCastleBlackLeft) {
-                                        console.log(canCastleBlackLeft);
+
 
                                         if (
                                             y == 8 &&
@@ -729,7 +733,7 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
                                             !$(".black_rook_2").hasClass("moved") &&
                                             canCastleBlackLeft
                                         ) {
-                                            console.log("Длинная рокировка белых!");
+
                                             // ВНИМАНИЕ: Немедленно перемещаем фигуры!
                                             const blackRook = $(".black_rook_1");
                                             const rookTargetCellId = "id84";
@@ -764,12 +768,17 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
                             }
                         }
                     }
+
+
+                    // if()
                 });
             });
         } else {
             // Логика для других фигур
-            // console.log(vH);
-            
+            // console.log(vH); 
+
+
+
             vH.forEach(function (arr) {
                 if (arr[0].length != 0) {
                     if (arr[1] == color && arr[2] == name && arr[3] == i + 1) {
@@ -784,13 +793,13 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
             });
         }
         return isTrue;
-    }else{
-        $('.'+color+'_king_1').css({
+    } else {
+        $('.' + color + '_king_1').css({
             animation: 'kingRed 5s ease-in-out forwards'
         });
         return false
     }
-    
+
 }
 function playOnce() {
     const audio = new Audio('../img/move.mp3'); // Замените на ваш путь
@@ -798,167 +807,167 @@ function playOnce() {
     audio.play();
 }
 
-function checkDiagonalCheck([startCol,startRow],diff ,color) {
-    let y = parseInt(startRow) ;
-    let x = parseInt(startCol) ;
+function checkDiagonalCheck([startCol, startRow], diff, color) {
+    let y = parseInt(startRow);
+    let x = parseInt(startCol);
     let figures = [];
-    if(diff == 'nl'){
+    if (diff == 'nl') {
         x--;
         y--;
-    }else if(diff == 'vp'){
+    } else if (diff == 'vp') {
         x++;
         y++;
-    }else if(diff == 'np'){
+    } else if (diff == 'np') {
         x++;
         y--;
-    }else if(diff == 'vl'){
+    } else if (diff == 'vl') {
         x--;
         y++;
-    }else if(diff == 'n'){
+    } else if (diff == 'n') {
         y--
-    }else if(diff == 'v'){
+    } else if (diff == 'v') {
         y++
-    }else if(diff == 'l'){
+    } else if (diff == 'l') {
         x--
-    }else if(diff == 'p'){
+    } else if (diff == 'p') {
         x++
     }
     // console.log(x,y);
-    
+
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
         const cell = $('.cell' + x + y);
         const cellClass = cell.attr('class');
-        if (cellClass && isCellOccupied(x, y)&&!cellClass.includes(color+'_king_1')) {
-            figures.push({cell, cellClass, x, y});
+        if (cellClass && isCellOccupied(x, y) && !cellClass.includes(color + '_king_1')) {
+            figures.push({ cell, cellClass, x, y });
             // break; // Остановиться на первой встреченной фигуре
         }
-        if(diff == 'nl'){
+        if (diff == 'nl') {
             x--;
             y--;
-        }else if(diff == 'vp'){
+        } else if (diff == 'vp') {
             x++;
             y++;
-        }else if(diff == 'np'){
+        } else if (diff == 'np') {
             x++;
             y--;
-        }else if(diff == 'vl'){
+        } else if (diff == 'vl') {
             x--;
             y++;
-        }else if(diff == 'n'){
+        } else if (diff == 'n') {
             y--
-        }else if(diff == 'v'){
+        } else if (diff == 'v') {
             y++
-        }else if(diff == 'l'){
+        } else if (diff == 'l') {
             x--
-        }else if(diff == 'p'){
+        } else if (diff == 'p') {
             x++
         }
     }
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
 }
-function getVHChange(piece,arrvH){
+function getVHChange(piece, arrvH) {
     let pieceClass = piece.attr("class").split(" ")[0]
     let pieceClassArr = pieceClass.split("_")
     vozmoznieHodi.forEach(function (arr) {
-        
-        if(arr[1] == pieceClassArr[0] && arr[2] == pieceClassArr[1] && arr[3] == pieceClassArr[2]){
+
+        if (arr[1] == pieceClassArr[0] && arr[2] == pieceClassArr[1] && arr[3] == pieceClassArr[2]) {
 
             // console.log(arr);
             // console.log(pieceClassArr);
             arr[0] = arrvH
             // console.log(vozmoznieHodi);
-            
+
         }
     })
 }
-function getVH(piece){
+function getVH(piece) {
     let vhPiece = null;
     let pieceClass = piece.attr("class").split(" ")[0]
     let pieceClassArr = pieceClass.split("_")
     vozmoznieHodi.forEach(function (arr) {
-        
-        if(arr[1] == pieceClassArr[0] && arr[2] == pieceClassArr[1] && arr[3] == pieceClassArr[2]){
+
+        if (arr[1] == pieceClassArr[0] && arr[2] == pieceClassArr[1] && arr[3] == pieceClassArr[2]) {
 
             vhPiece = arr;
-            
-            
+
+
         }
     })
     return vhPiece;
 }
-function findPiceHodi([startCol,startRow],diff,color) {
-    let y = parseInt(startRow) ;
-    let x = parseInt(startCol) ;
+function findPiceHodi([startCol, startRow], diff, color) {
+    let y = parseInt(startRow);
+    let x = parseInt(startCol);
     let figures = [];
-    if(diff == 'nl'){
+    if (diff == 'nl') {
         x--;
         y--;
-    }else if(diff == 'vp'){
+    } else if (diff == 'vp') {
         x++;
         y++;
         //sassasa
-    }else if(diff == 'np'){
+    } else if (diff == 'np') {
         x++;
         y--;
-    }else if(diff == 'vl'){
+    } else if (diff == 'vl') {
         x--;
         y++;
-    }else if(diff == 'n'){
+    } else if (diff == 'n') {
         y--
-    }else if(diff == 'v'){
+    } else if (diff == 'v') {
         y++
-    }else if(diff == 'l'){
+    } else if (diff == 'l') {
         x--
-    }else if(diff == 'p'){
+    } else if (diff == 'p') {
         x++
     }
     // console.log(x,y);
-    
+
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
-        const cell = $('#id' + x +'' + y);
+        const cell = $('#id' + x + '' + y);
         // console.log(cell);
         // console.log(x,y);
-        
+
         const cellClass = cell.attr('class');
         // console.log(cell);
         // console.log(cellClass.split(' ').length);
 
         // console.log(x,y);
-        
-        
-                
 
-        figures.push('id'+x+y);
-            
-        
-        if(diff == 'nl'){
+
+
+
+        figures.push('id' + x + y);
+
+
+        if (diff == 'nl') {
             x--;
             y--;
-        }else if(diff == 'vp'){
+        } else if (diff == 'vp') {
             x++;
             y++;
-        }else if(diff == 'np'){
+        } else if (diff == 'np') {
             x++;
             y--;
-        }else if(diff == 'vl'){
+        } else if (diff == 'vl') {
             x--;
             y++;
-        }else if(diff == 'n'){
+        } else if (diff == 'n') {
             y--
-        }else if(diff == 'v'){
+        } else if (diff == 'v') {
             y++
-        }else if(diff == 'l'){
+        } else if (diff == 'l') {
             x--
-        }else if(diff == 'p'){
+        } else if (diff == 'p') {
             x++
         }
     }
-    console.log(figures);
-    
+    // console.log(figures);
+
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
 }
-function findKingPins(aH,color) {
-    const kingCell = $(".cell_"+color+"_king_1");
+function findKingPins(aH, color) {
+    const kingCell = $(".cell_" + color + "_king_1");
     const kingCellId = kingCell.attr("id");
     aH.forEach(function (arr) {
         // console.log(arr);
@@ -968,12 +977,12 @@ function findKingPins(aH,color) {
 
 
             // console.log(id[2] , kingCellId[2] , id[3] , kingCellId[3]);
-            
+
             let pos = null;
             if (id[2] == kingCellId[2] && id[3] == kingCellId[3] && arr[1] != color) {
                 // console.log(id[2] - kingCellId[2] && id[3] - kingCellId[3]);
                 // console.log(arr);
-                let attackPiece = $('.'+arr[1]+'_'+arr[2]+'_'+arr[3]);
+                let attackPiece = $('.' + arr[1] + '_' + arr[2] + '_' + arr[3]);
                 // console.log(attackPiece.attr("class").split(" ")[2]);
                 let attackPiecePosY = attackPiece.attr("class").split(" ")[2][4];
                 let attackPiecePosX = attackPiece.attr("class").split(" ")[2][5];
@@ -981,93 +990,93 @@ function findKingPins(aH,color) {
                 let diffx = attackPiecePosY - id[2]
                 let diffy = attackPiecePosX - id[3]
                 // console.log(attackPiecePosY - id[2],attackPiecePosX-id[3]);
-                if(diffx >0 && attackPiecePosX-id[3] >0){
+                if (diffx > 0 && attackPiecePosX - id[3] > 0) {
                     // console.log('diagonal');
 
                     pos = 'nl'
-                     
-                    
+
+
                     //Значит это либо слон либо ферзь и король ниже левее
-                }else if(diffx<0 && diffy <0){
+                } else if (diffx < 0 && diffy < 0) {
                     // console.log('diagonal');
                     pos = 'vp'
                     // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos ));
                     //Значит это либо слон либо ферзь и король выше правее
-                }else if(diffx>0 && diffy <0){
+                } else if (diffx > 0 && diffy < 0) {
                     pos = 'np'
                     //Значит это либо слон либо ферзь и король ниже правее
-                }else if(diffx<0 && diffy >0){
+                } else if (diffx < 0 && diffy > 0) {
                     pos = 'vl'
                     //Значит это либо слон либо ферзь и король выше левее
-                }else if(diffx>0 && diffy == 0){
+                } else if (diffx > 0 && diffy == 0) {
                     pos = 'n'
                     //Значит это либо ладья либо ферзь и король ниже
-                }else if(diffx<0 && diffy == 0){
+                } else if (diffx < 0 && diffy == 0) {
                     pos = 'v'
                     //Значит это либо ладья либо ферзь и король выше
-                }else if(diffx == 0 && diffy >0){
+                } else if (diffx == 0 && diffy > 0) {
                     pos = 'l'
                     //Значит это либо ладья либо ферзь и король левее
-                }else if(diffx == 0 && diffy <0){
+                } else if (diffx == 0 && diffy < 0) {
                     pos = 'p'
                     //Значит это либо ладья либо ферзь и король правее
                 }
-                
-                if(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos ,color).length > 0 && checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color ).length == 1 ){
+
+                if (checkDiagonalCheck([attackPiecePosY, attackPiecePosX], pos, color).length > 0 && checkDiagonalCheck([attackPiecePosY, attackPiecePosX], pos, color).length == 1) {
 
                     // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color ));
-                    let cantMove = checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color )
-                    let possibleMoves =  getVH(cantMove[0]['cell'])[0]
+                    let cantMove = checkDiagonalCheck([attackPiecePosY, attackPiecePosX], pos, color)
+                    let possibleMoves = getVH(cantMove[0]['cell'])[0]
                     // console.log(possibleMoves);
 
                     let posCM = [];
-                    
-                    
-                    if(pos == 'nl'||pos == 'vp'){
-                        posCM = ['nl','vp']
-                    }else if(pos == 'np'||pos == 'vl'){
-                        posCM = ['np','vl']
-                    }else if(pos == 'n'||pos == 'v'){
-                        posCM = ['n','v']
-                    }else if(pos == 'l'||pos == 'p'){
-                        posCM = ['l','p']
+
+
+                    if (pos == 'nl' || pos == 'vp') {
+                        posCM = ['nl', 'vp']
+                    } else if (pos == 'np' || pos == 'vl') {
+                        posCM = ['np', 'vl']
+                    } else if (pos == 'n' || pos == 'v') {
+                        posCM = ['n', 'v']
+                    } else if (pos == 'l' || pos == 'p') {
+                        posCM = ['l', 'p']
                     }
                     // console.log(posCM);
                     let defendPieceY = cantMove[0]['cell'].attr("class").split(" ")[2][4]
                     let defendPieceX = cantMove[0]['cell'].attr("class").split(" ")[2][5]
                     // console.log(defendPieceY,defendPieceX);
-                    
+
                     let posCMARR = []
-                    
+
                     posCM.forEach(function (arrCM) {
                         // console.log(posCM);
-                        findPiceHodi([defendPieceY,defendPieceX],arrCM ,color).forEach(function(fph){
+                        findPiceHodi([defendPieceY, defendPieceX], arrCM, color).forEach(function (fph) {
                             posCMARR.push(fph)
                         })
-                        
+
                     })
                     // console.log(findPiceHodi([defendPieceY,defendPieceX],pos ,color));
-                    
-                    console.log(posCMARR);
+
+                    // console.log(posCMARR);
                     let heIsFind = []
-                    possibleMoves.forEach(function(idVH){
+                    possibleMoves.forEach(function (idVH) {
                         // console.log(idVH,'--',posCMARR[0]);
-                        posCMARR.forEach(function(fph){
-                            if(idVH == fph){
-                                console.log('-------------------------');
-                                console.log(fph);
+                        posCMARR.forEach(function (fph) {
+                            if (idVH == fph) {
+                                // console.log('-------------------------');
+                                // console.log(fph);
                                 heIsFind.push(fph)
                             }
                         })
-                        
+
                     })
-                    
+
                     // console.log(posCMARR);
 
 
-                    
-                     
-                    getVHChange(cantMove[0]['cell'],heIsFind)
+
+
+                    getVHChange(cantMove[0]['cell'], heIsFind)
 
                 }
 
@@ -1076,91 +1085,108 @@ function findKingPins(aH,color) {
     })
 }
 
-function findBlockersCheck(startCol,startRow,diff,color) {
-    let y = parseInt(startRow) ;
-    let x = parseInt(startCol) ;
+function findBlockersCheck(startCol, startRow, diff, color) {
+    let y = parseInt(startRow);
+    let x = parseInt(startCol);
     let figures = [];
-    if(diff == 'nl'){
+    if (diff == 'nl') {
         x--;
         y--;
-    }else if(diff == 'vp'){
+    } else if (diff == 'vp') {
         x++;
         y++;
         //sassasa
-    }else if(diff == 'np'){
+    } else if (diff == 'np') {
         x++;
         y--;
-    }else if(diff == 'vl'){
+    } else if (diff == 'vl') {
         x--;
         y++;
-    }else if(diff == 'n'){
+    } else if (diff == 'n') {
         y--
-    }else if(diff == 'v'){
+    } else if (diff == 'v') {
         y++
-    }else if(diff == 'l'){
+    } else if (diff == 'l') {
         x--
-    }else if(diff == 'p'){
+    } else if (diff == 'p') {
         x++
     }
     // console.log(x,y);
-    
+
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
-        const cell = $('#id' + x +'' + y);
+        const cell = $('#id' + x + '' + y);
         // console.log(cell);
         // console.log(x,y);
-        
+
         const cellClass = cell.attr('class');
         // console.log(cell);
-        if (!cellClass.includes(color+'_king_1')) {
+        if (!cellClass.includes(color + '_king_1')) {
             // console.log(vozmoznieHodi);
             vozmoznieHodi.forEach(function (arr) {
                 // console.log(arr);
-                
+
                 arr[0].forEach(function (id) {
                     // console.log(arr);
-                    
+
 
                     // console.log(arr[1] == color , id[2] == x , id[3] == y);
 
                     // console.log(x,y);
-                    
-                    
-                    if (arr[1] == color&&arr[2]!='king' && id[2] == x && id[3] == y) {
+
+
+                    if (arr[1] == color && arr[2] != 'king' && id[2] == x && id[3] == y) {
                         console.log('--------------------------------------------------------------------------------');
-                        figures.push([cell,color, arr[2],arr[3], x, y]);
+                        figures.push([cell, color, arr[2], arr[3], x, y]);
                         // break; // Остановиться на первой встреченной фигуре
                     }
                 });
             })
             // break; // Остановиться на первой встреченной фигуре
         }
-        if(diff == 'nl'){
+        if (diff == 'nl') {
             x--;
             y--;
-        }else if(diff == 'vp'){
+        } else if (diff == 'vp') {
             x++;
             y++;
-        }else if(diff == 'np'){
+        } else if (diff == 'np') {
             x++;
             y--;
-        }else if(diff == 'vl'){
+        } else if (diff == 'vl') {
             x--;
             y++;
-        }else if(diff == 'n'){
+        } else if (diff == 'n') {
             y--
-        }else if(diff == 'v'){
+        } else if (diff == 'v') {
             y++
-        }else if(diff == 'l'){
+        } else if (diff == 'l') {
             x--
-        }else if(diff == 'p'){
+        } else if (diff == 'p') {
             x++
         }
     }
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
 }
 function kingIsNotUnderAttack(color, vH) {
+    let king = $('.' + color + '_king_1')
 
-    
+    let kingArr = getVH(king);
+
+    vH.forEach(function (arrvH) {
+        arrvH[0].forEach(function (idvH) {
+            kingArr[0].forEach(function (kingvH) {
+                if (idvH[2] == kingvH[2] && idvH[3] == kingvH[3] && arrvH[1] != color) {
+                    let index = kingArr[0].indexOf(kingvH);
+                    if (index !== -1) {
+                        kingArr[0].splice(index, 1);
+                        getVHChange(king, kingArr[0]);
+                        // console.log(vozmoznieHodi);
+                    }
+                }
+            })
+        })
+    })
+
     let kingIsUnderAttack = false
     let figures = [];
     const kingCell = $(".cell_" + color + "_king_1");
@@ -1170,81 +1196,93 @@ function kingIsNotUnderAttack(color, vH) {
         arr[0].forEach(function (id) {
             if (arr[1] != color && id[2] == y && id[3] == x) {
                 kingIsUnderAttack = true
-                let attackCell = $('.'+arr[1]+'_'+arr[2]+'_'+arr[3]);
+                let attackCell = $('.' + arr[1] + '_' + arr[2] + '_' + arr[3]);
                 let atty = attackCell.attr("class").split(" ")[2][4]
                 let attx = attackCell.attr("class").split(" ")[2][5]
-                console.log(y,x);
+
                 let diffx = atty - id[2];
                 let diffy = attx - id[3];
-                if(diffx >0 && diffy >0){
+                if (diffx > 0 && diffy > 0) {
                     // console.log('diagonal');
 
                     pos = 'nl'
-                        
-                    
+
+
                     //Значит это либо слон либо ферзь и король ниже левее
-                }else if(diffx<0 && diffy <0){
+                } else if (diffx < 0 && diffy < 0) {
                     // console.log('diagonal');
                     pos = 'vp'
                     // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos ));
                     //Значит это либо слон либо ферзь и король выше правее
-                }else if(diffx>0 && diffy <0){
+                } else if (diffx > 0 && diffy < 0) {
                     pos = 'np'
                     //Значит это либо слон либо ферзь и король ниже правее
-                }else if(diffx<0 && diffy >0){
+                } else if (diffx < 0 && diffy > 0) {
                     pos = 'vl'
                     //Значит это либо слон либо ферзь и король выше левее
-                }else if(diffx>0 && diffy == 0){
+                } else if (diffx > 0 && diffy == 0) {
                     pos = 'n'
                     //Значит это либо ладья либо ферзь и король ниже
-                }else if(diffx<0 && diffy == 0){
+                } else if (diffx < 0 && diffy == 0) {
                     pos = 'v'
                     //Значит это либо ладья либо ферзь и король выше
-                }else if(diffx == 0 && diffy >0){
+                } else if (diffx == 0 && diffy > 0) {
                     pos = 'l'
                     //Значит это либо ладья либо ферзь и король левее
-                }else if(diffx == 0 && diffy <0){
+                } else if (diffx == 0 && diffy < 0) {
                     pos = 'p'
                     //Значит это либо ладья либо ферзь и король правее
                 }
                 // console.log(findBlockersCheck(atty,attx,pos,color));
-                figures =  findBlockersCheck(atty,attx,pos,color);
+                figures = findBlockersCheck(atty, attx, pos, color);
                 // console.log(pos);
-                
+
             }
         });
     })
 
-    
-    if(kingIsUnderAttack && figures.length > 0){
+
+    if (kingIsUnderAttack && figures.length > 0) {
         const allFigures = $(".figure");
-        allFigures.each(function (index,element) {
+        allFigures.each(function (index, element) {
             // console.log(element);
             let figure = $(element);
             let figureClass = figure.attr("class").split(" ")[0].split("_");
-            let figurePureClass = figure.attr("class");
-            let figureCell = figure.attr("class").split(" ")[2];
 
 
 
-            figures.forEach(function(arr){
-                // console.log(arr);
-                
-                if(!(arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2])&& figureClass[0] == color){
+
+            figures.forEach(function (arr) {
+                // console.log(figureClass);
+
+                if (!(arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2]) && figureClass[0] == color && figureClass[1] != 'king') {
                     // figure.attr("class", figureClass[0] + '_' + figureClass[1] + '_' + figureClass[2] + ' figure '+figureCell +' '+ 'cantMove')
-                    getVHChange(figure,[])
-                }else {
+                    // console.log(figureClass);
+
+                    getVHChange(figure, [])
+                    // console.log('nepogoida');
+
+                } else if ((arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2]) && figureClass[0] == color && figureClass != [color, 'king', '1']) {
                     vH.forEach(function (arrVH) {
-                        if(arrVH[1] == arr[1]&& arrVH[2] == arr[2]&& arrVH[3] == arr[3]){
-                            arrVH[0] = ['id'+arr[4]+arr[5]]
+                        if (arrVH[1] == arr[1] && arrVH[2] == arr[2] && arrVH[3] == arr[3]) {
+                            arrVH[0] = ['id' + arr[4] + arr[5]]
                         }
                     })
+                    // console.log('goida');
+
                 }
-                if(kingIsUnderAttack == false){
-                   
-                }
+
             })
         })
+    }
+    if (kingIsUnderAttack) {
+        // console.log(getVH($('.' + color + '_king_1')));
+        console.log(kingArr[0].length, figures.length );
+        
+        if(kingArr[0].length == 0 && figures.length == 0){
+            console.log('mate');
+            
+        }
     }
 
 }

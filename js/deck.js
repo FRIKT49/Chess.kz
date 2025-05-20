@@ -169,7 +169,7 @@ for (let figure in whitePieces) {
 
                                     if (canIMove(figureCellCordsx, figureCellCordsy, pickCords[1], pickCords[0], nameOfFigure[0], nameOfFigure[1], i, vozmoznieHodi, figureClone)) {
                                         playOnce()
-                                        console.log($(element).attr('id')[2]);
+
                                         
                                         if (!(figureCellCordsx == $(element).attr('id')[2] && figureCellCordsy == $(element).attr('id')[3])) {
                                             $('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]).css({
