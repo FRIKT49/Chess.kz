@@ -1063,6 +1063,8 @@ function findKingPins(aH,color) {
                     })
                     
                     // console.log(posCMARR);
+
+
                     
                      
                     getVHChange(cantMove[0]['cell'],heIsFind)
