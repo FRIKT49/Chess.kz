@@ -198,9 +198,7 @@ html, body {
     font-size: 20px;
     color: #739552;
 }
-.cell:hover{
-    outline: 1px solid blue !important;
-}
+
 .figure{
     position:absolute;
     z-index: 0;

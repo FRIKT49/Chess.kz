@@ -308,7 +308,6 @@ function calculatePossibleMoves(figureElement) {
     }
 
     if (king.test(figureType)) {
-        var isCastle = [false, null];
 
         const kingMoves = [
             [-1, -1],
@@ -527,7 +526,7 @@ function obrabotchikVozmoznichDvijeni() {
 }
 
 function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, figureClone) {
-    
+
     if (!figureClone.attr("class").includes("cantMove")) {
         let canCastleWhiteRight = true;
         let canCastleWhiteLeft = true;
@@ -544,6 +543,7 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
 
 
         if (name === "king") {
+
             vH.forEach(function (arr) {
                 arr[0].forEach(function (id) {
                     // console.log(id[2] == 1 && id[3] == 5);
@@ -772,6 +772,18 @@ function canIMove(figureCellCordsx, figureCellCordsy, x, y, color, name, i, vH, 
 
                     // if()
                 });
+            });
+            vH.forEach(function (arr) {
+                if (arr[0].length != 0) {
+                    if (arr[1] == color && arr[2] == name && arr[3] == i + 1) {
+                        arr[0].forEach(function (id) {
+                            if (id[2] == y && id[3] == x) {
+                                isTrue = true;
+                            }
+                        });
+                    }
+
+                }
             });
         } else {
             // Логика для других фигур
@@ -1167,6 +1179,7 @@ function findBlockersCheck(startCol, startRow, diff, color) {
     }
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
 }
+let kingIsUnderAttack = false
 function kingIsNotUnderAttack(color, vH) {
     let king = $('.' + color + '_king_1')
 
@@ -1177,9 +1190,13 @@ function kingIsNotUnderAttack(color, vH) {
             kingArr[0].forEach(function (kingvH) {
                 if (idvH[2] == kingvH[2] && idvH[3] == kingvH[3] && arrvH[1] != color) {
                     let index = kingArr[0].indexOf(kingvH);
+
+
                     if (index !== -1) {
+                        // console.log('Check');
                         kingArr[0].splice(index, 1);
                         getVHChange(king, kingArr[0]);
+                        // kingIsUnderAttack = true
                         // console.log(vozmoznieHodi);
                     }
                 }
@@ -1187,7 +1204,7 @@ function kingIsNotUnderAttack(color, vH) {
         })
     })
 
-    let kingIsUnderAttack = false
+
     let figures = [];
     const kingCell = $(".cell_" + color + "_king_1");
     let y = parseInt(kingCell.attr("id")[2]);
@@ -1260,7 +1277,7 @@ function kingIsNotUnderAttack(color, vH) {
                     // console.log(figureClass);
 
                     getVHChange(figure, [])
-                    // console.log('nepogoida');
+
 
                 } else if ((arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2]) && figureClass[0] == color && figureClass != [color, 'king', '1']) {
                     vH.forEach(function (arrVH) {
@@ -1268,7 +1285,6 @@ function kingIsNotUnderAttack(color, vH) {
                             arrVH[0] = ['id' + arr[4] + arr[5]]
                         }
                     })
-                    // console.log('goida');
 
                 }
 
@@ -1277,12 +1293,248 @@ function kingIsNotUnderAttack(color, vH) {
     }
     if (kingIsUnderAttack) {
         // console.log(getVH($('.' + color + '_king_1')));
-        console.log(kingArr[0].length, figures.length );
-        
-        if(kingArr[0].length == 0 && figures.length == 0){
+
+
+        if (kingArr[0].length == 0 && figures.length == 0) {
+
             console.log('mate');
-            
+
         }
     }
 
 }
+function checkDiagonalCheckAttack([startCol, startRow], diff, color) {
+    let y = parseInt(startRow);
+    let x = parseInt(startCol);
+    let figures = [];
+    if (diff == 'nl') {
+        x--;
+        y--;
+    } else if (diff == 'vp') {
+        x++;
+        y++;
+    } else if (diff == 'np') {
+        x++;
+        y--;
+    } else if (diff == 'vl') {
+        x--;
+        y++;
+    } else if (diff == 'n') {
+        y--
+    } else if (diff == 'v') {
+        y++
+    } else if (diff == 'l') {
+        x--
+    } else if (diff == 'p') {
+        x++
+    }
+    // console.log(x,y);
+
+    while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
+        const cell = $('.cell' + x + y);
+        const cellClass = cell.attr('class');
+        if (cellClass && isCellOccupied(x, y)) {
+            figures.push({ cell, cellClass, x, y });
+            // break; // Остановиться на первой встреченной фигуре
+        }
+        if (diff == 'nl') {
+            x--;
+            y--;
+        } else if (diff == 'vp') {
+            x++;
+            y++;
+        } else if (diff == 'np') {
+            x++;
+            y--;
+        } else if (diff == 'vl') {
+            x--;
+            y++;
+        } else if (diff == 'n') {
+            y--
+        } else if (diff == 'v') {
+            y++
+        } else if (diff == 'l') {
+            x--
+        } else if (diff == 'p') {
+            x++
+        }
+    }
+    return figures; // Массив с найденной фигурой (или пустой, если не нашли)
+}
+function kingAttack(color) {
+    let isAttacked = false
+    let protect = false
+    const kingMoves = [
+        [-1, -1],
+        [-1, 0],
+        [-1, 1],
+        [0, -1],
+        [0, 1],
+        [1, -1],
+        [1, 0],
+        [1, 1],
+    ];
+    const kingCell = $('.cell_' + color + '_king_1');
+    const king = $('.' + color + '_king_1');
+    let [currentRow, currentCol] = [kingCell.attr('id')[2], kingCell.attr('id')[3]]
+    var attPiece
+    kingMoves.forEach(([rowOffset, colOffset]) => {
+        const newRow = parseInt(currentRow) + rowOffset;
+        const newCol = parseInt(currentCol) + colOffset;
+
+
+        if (newRow >= 1 && newRow <= 8 && newCol >= 1 && newCol <= 8) {
+
+            if (isCellOccupied(newRow, newCol)) {
+
+
+                let attCell = $('#id' + newRow + '' + newCol)
+                attCellClass = attCell.attr('class').split(' ')
+
+
+                if (attCellClass.length > 1) {
+
+                    let attCellClassSplit = attCellClass[1].split('_')
+                    var attPiece = attPiece = $('.' + attCellClassSplit[1] + '_' + attCellClassSplit[2] + '_' + attCellClassSplit[3])
+
+
+
+
+                    if (attCellClassSplit[1] != color) {
+
+                        allHodi.forEach(function (arr) {
+                            arr[0].forEach(function (id) {
+
+                                let pos = null
+
+
+
+
+                                let attPieceCell = [attPiece.attr('class').split(' ')[2][4], attPiece.attr('class').split(' ')[2][5]]
+                                let defPiece = $('.' + arr[1] + '_' + arr[2] + '_' + arr[3])
+                                let defPieceCell = [defPiece.attr('class').split(' ')[2][4], defPiece.attr('class').split(' ')[2][5]]
+
+                                let diffx = defPieceCell[1] - attPieceCell[1]
+                                let diffy = defPieceCell[0] - attPieceCell[0]
+                                let minus = []
+                                if (diffx > 0 && diffy > 0) {
+
+
+                                    pos = 'nl'
+                                    minus = [-1, -1]
+
+                                    //Значит это либо слон либо ферзь и король ниже левее
+                                } else if (diffx < 0 && diffy < 0) {
+
+                                    pos = 'vp'
+                                    minus = [1, 1]
+
+                                } else if (diffx > 0 && diffy < 0) {
+                                    pos = 'np'
+                                    minus = [-1, 1]
+                                    //Значит это либо слон либо ферзь и король ниже правее
+                                } else if (diffx < 0 && diffy > 0) {
+                                    pos = 'vl'
+                                    minus = [1, -1]
+                                    //Значит это либо слон либо ферзь и король выше левее
+                                } else if (diffx > 0 && diffy == 0) {
+                                    pos = 'n'
+                                    minus = [-1, 0]
+                                    //Значит это либо ладья либо ферзь и король ниже
+                                } else if (diffx < 0 && diffy == 0) {
+                                    pos = 'v'
+                                    minus = [1, 0]
+                                    //Значит это либо ладья либо ферзь и король выше
+                                } else if (diffx == 0 && diffy > 0) {
+                                    pos = 'l'
+                                    minus = [0, -1]
+                                    //Значит это либо ладья либо ферзь и король левее
+                                } else if (diffx == 0 && diffy < 0) {
+                                    pos = 'p'
+                                    minus = [0, 1]
+                                    //Значит это либо ладья либо ферзь и король правее
+                                }
+
+                                let figures = []
+
+                                if (pos) {
+                                    figures = checkDiagonalCheckAttack([defPieceCell[0], defPieceCell[1]], pos, color)
+                                    console.log(figures);
+                                    console.log(pos);
+
+                                    if (figures[0]) {
+                                        if (!figures[0]['cellClass'].split(' ')[0] == attPiece.attr('class').split(' ')[0]) {
+                                            console.log('ura');
+                                            getVHChange(king, ['id' + attPiece.attr('class').split(' ')[2][4] + attPiece.attr('class').split(' ')[2][5]])
+
+                                        } else if (figures[0]['cellClass'].split(' ')[0] == attPiece.attr('class').split(' ')[0]) {
+                                            let arrHodov = []
+                                            kingMoves.forEach(([rowOffset, colOffset]) => {
+                                                const newRow2 = parseInt(currentRow) + rowOffset;
+                                                const newCol2 = parseInt(currentCol) + colOffset;
+                                                if (!isCellOccupied(newRow2, newCol2)) {
+                                                    arrHodov.push('id' + newRow2 + newCol2)
+                                                    // vozmoznieHodi.forEach((arr2)=>{
+                                                    //     arr.forEach((id2)=>{
+                                                    //        if(id2[2]== currentRow&& id2[3] ==  currentCol){
+
+                                                    //        }
+                                                    //     })
+                                                    // })
+
+
+                                                }
+
+                                            })
+                                            vozmoznieHodi.forEach((arr) => {
+                                                arr[0].forEach((id) => {
+                                                    // console.log(arr[0]);
+
+
+
+                                                    if (arrHodov.indexOf(id) != -1 && arr[1] != color) {
+                                                        console.log(id);
+                                                        
+                                                        arrHodov.splice(id, 1)
+                                                        console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA');
+
+                                                    }
+
+
+
+
+                                                })
+                                            })
+                                            console.log(arrHodov);
+                                            getVHChange(king, arrHodov)
+                                        }
+                                    }
+                                }
+
+
+
+
+
+
+                            })
+                        })
+
+                    }
+                }
+            }
+        }
+
+
+    });
+
+
+
+}
+function deletePiece(piece) {
+
+    piece.remove()
+    console.log(piece);
+
+}
+
+

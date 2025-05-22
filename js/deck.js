@@ -19,7 +19,7 @@ for (const letter of letters) {
 
         cellClone.css({
             display: 'block',
-            outline: "1px solid red",
+
             width: cellWidth + 'px',
             height: cellHeight + 'px',
 
@@ -142,6 +142,7 @@ for (let figure in whitePieces) {
             })
             obrabotchikVozmoznichDvijeni()
             obrabotchikVsehDvijeni()
+            kingAttack('white')
             kingIsNotUnderAttack('white', vozmoznieHodi)
             findKingPins(allHodi,'white')
             //    -----------------------------------------------------------------------------------------------
@@ -172,9 +173,10 @@ for (let figure in whitePieces) {
 
                                         
                                         if (!(figureCellCordsx == $(element).attr('id')[2] && figureCellCordsy == $(element).attr('id')[3])) {
-                                            $('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]).css({
-                                                'display': 'none'
-                                            });
+                                            // $('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]).css({
+                                            //     'display': 'none'
+                                            // });
+                                            deletePiece($('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]))
 
 
 
@@ -196,7 +198,8 @@ for (let figure in whitePieces) {
 
 
                                             })
-
+                                            
+                                            
                                         } else {
                                             figureClone.css({
                                                 'left': null,
@@ -269,9 +272,10 @@ for (let figure in whitePieces) {
 
             $('body').off('mousemove')
 
-
+            kingAttack('black')
             kingIsNotUnderAttack('black', vozmoznieHodi)
             findKingPins(allHodi,'white')
+            
         })
         
 
@@ -352,7 +356,7 @@ for (let figure in blackPieces) {
             })
             obrabotchikVozmoznichDvijeni()
             obrabotchikVsehDvijeni()
-            
+            kingAttack('black')
             kingIsNotUnderAttack('black', vozmoznieHodi)
             findKingPins(allHodi,'black')
             //    -----------------------------------------------------------------------------------------------
@@ -389,11 +393,11 @@ for (let figure in blackPieces) {
                                         playOnce()
 
                                         if (!(figureCellCordsx == $(element).attr('id')[2] && figureCellCordsy == $(element).attr('id')[3])) {
-                                            $('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]).css({
-                                                'display': 'none'
-                                            });
+                                            // $('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]).css({
+                                            //     'display': 'none'
+                                            // });
 
-
+                                            deletePiece($('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]))
 
                                             $(element).attr('class', 'cell' + ' ' + 'cell_black_' + name + '_' + (i + 1))
 
@@ -486,9 +490,10 @@ for (let figure in blackPieces) {
 
             $('body').off('mousemove')
 
-
+            kingAttack('white')
             kingIsNotUnderAttack('white', vozmoznieHodi)
             findKingPins(allHodi,'white')
+            
         })
 
 
