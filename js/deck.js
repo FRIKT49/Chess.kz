@@ -272,7 +272,7 @@ for (let figure in whitePieces) {
 
             $('body').off('mousemove')
 
-            kingAttack('black')
+
             kingIsNotUnderAttack('black', vozmoznieHodi)
             findKingPins(allHodi,'white')
             
@@ -490,7 +490,7 @@ for (let figure in blackPieces) {
 
             $('body').off('mousemove')
 
-            kingAttack('white')
+
             kingIsNotUnderAttack('white', vozmoznieHodi)
             findKingPins(allHodi,'white')
             
