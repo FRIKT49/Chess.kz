@@ -823,34 +823,45 @@ function checkDiagonalCheck([startCol, startRow], diff, color) {
     let y = parseInt(startRow);
     let x = parseInt(startCol);
     let figures = [];
-    if (diff == 'nl') {
-        x--;
-        y--;
-    } else if (diff == 'vp') {
-        x++;
-        y++;
-    } else if (diff == 'np') {
-        x++;
-        y--;
-    } else if (diff == 'vl') {
-        x--;
-        y++;
-    } else if (diff == 'n') {
-        y--
-    } else if (diff == 'v') {
-        y++
-    } else if (diff == 'l') {
-        x--
-    } else if (diff == 'p') {
-        x++
-    }
-    // console.log(x,y);
+    // if (diff == 'nl') {
+    //     x--;
+    //     y--;
+    // } else if (diff == 'vp') {
+    //     x++;
+    //     y++;
+    // } else if (diff == 'np') {
+    //     x++;
+    //     y--;
+    // } else if (diff == 'vl') {
+    //     x--;
+    //     y++;
+    // } else if (diff == 'n') {
+    //     y--
+    // } else if (diff == 'v') {
+    //     y++
+    // } else if (diff == 'l') {
+    //     x--
+    // } else if (diff == 'p') {
+    //     x++
+    // }
+
+
 
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
+
+
         const cell = $('.cell' + x + y);
         const cellClass = cell.attr('class');
-        if (cellClass && isCellOccupied(x, y) && !cellClass.includes(color + '_king_1')) {
-            figures.push({ cell, cellClass, x, y });
+        // console.log(cellClass , isCellOccupied(x, y) , !cellClass.includes(color + '_king_1'));
+
+        if (cellClass && isCellOccupied(x, y)) {
+            if (!cellClass.includes(color + '_king_1')) {
+                figures.push({ cell, cellClass, x, y });
+
+            }
+
+
+
             // break; // Остановиться на первой встреченной фигуре
         }
         if (diff == 'nl') {
@@ -860,19 +871,19 @@ function checkDiagonalCheck([startCol, startRow], diff, color) {
             x++;
             y++;
         } else if (diff == 'np') {
-            x++;
-            y--;
-        } else if (diff == 'vl') {
             x--;
             y++;
+        } else if (diff == 'vl') {
+            x++;
+            y--;
         } else if (diff == 'n') {
-            y--
-        } else if (diff == 'v') {
-            y++
-        } else if (diff == 'l') {
             x--
-        } else if (diff == 'p') {
+        } else if (diff == 'v') {
             x++
+        } else if (diff == 'l') {
+            y--
+        } else if (diff == 'p') {
+            y++
         }
     }
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
@@ -884,10 +895,9 @@ function getVHChange(piece, arrvH) {
 
         if (arr[1] == pieceClassArr[0] && arr[2] == pieceClassArr[1] && arr[3] == pieceClassArr[2]) {
 
-            // console.log(arr);
-            // console.log(pieceClassArr);
+
             arr[0] = arrvH
-            // console.log(vozmoznieHodi);
+            
 
         }
     })
@@ -937,14 +947,10 @@ function findPiceHodi([startCol, startRow], diff, color) {
 
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
         const cell = $('#id' + x + '' + y);
-        // console.log(cell);
-        // console.log(x,y);
+
 
         const cellClass = cell.attr('class');
-        // console.log(cell);
-        // console.log(cellClass.split(' ').length);
 
-        // console.log(x,y);
 
 
 
@@ -974,7 +980,6 @@ function findPiceHodi([startCol, startRow], diff, color) {
             x++
         }
     }
-    // console.log(figures);
 
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
 }
@@ -982,37 +987,35 @@ function findKingPins(aH, color) {
     const kingCell = $(".cell_" + color + "_king_1");
     const kingCellId = kingCell.attr("id");
     aH.forEach(function (arr) {
-        // console.log(arr);
+
         arr[0].forEach(function (id) {
-            // console.log(kingCellId[2],kingCellId[3],id[2],id[3]);
 
-
-
-            // console.log(id[2] , kingCellId[2] , id[3] , kingCellId[3]);
 
             let pos = null;
             if (id[2] == kingCellId[2] && id[3] == kingCellId[3] && arr[1] != color) {
-                // console.log(id[2] - kingCellId[2] && id[3] - kingCellId[3]);
-                // console.log(arr);
+
+
                 let attackPiece = $('.' + arr[1] + '_' + arr[2] + '_' + arr[3]);
-                // console.log(attackPiece.attr("class").split(" ")[2]);
+
                 let attackPiecePosY = attackPiece.attr("class").split(" ")[2][4];
                 let attackPiecePosX = attackPiece.attr("class").split(" ")[2][5];
-                // console.log(id);
+
                 let diffx = attackPiecePosY - id[2]
                 let diffy = attackPiecePosX - id[3]
-                // console.log(attackPiecePosY - id[2],attackPiecePosX-id[3]);
+
+
+
                 if (diffx > 0 && attackPiecePosX - id[3] > 0) {
-                    // console.log('diagonal');
+
 
                     pos = 'nl'
 
 
                     //Значит это либо слон либо ферзь и король ниже левее
                 } else if (diffx < 0 && diffy < 0) {
-                    // console.log('diagonal');
+
                     pos = 'vp'
-                    // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos ));
+
                     //Значит это либо слон либо ферзь и король выше правее
                 } else if (diffx > 0 && diffy < 0) {
                     pos = 'np'
@@ -1034,12 +1037,17 @@ function findKingPins(aH, color) {
                     //Значит это либо ладья либо ферзь и король правее
                 }
 
-                if (checkDiagonalCheck([attackPiecePosY, attackPiecePosX], pos, color).length > 0 && checkDiagonalCheck([attackPiecePosY, attackPiecePosX], pos, color).length == 1) {
 
-                    // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos,color ));
-                    let cantMove = checkDiagonalCheck([attackPiecePosY, attackPiecePosX], pos, color)
-                    let possibleMoves = getVH(cantMove[0]['cell'])[0]
-                    // console.log(possibleMoves);
+                let check = checkDiagonalCheck([attackPiecePosY, attackPiecePosX], pos, color)
+
+
+                if (check.length > 0 && check.length == 2) {
+
+
+
+
+                    let possibleMoves = getVH(check[1]['cell'])[0]
+
 
                     let posCM = [];
 
@@ -1053,42 +1061,45 @@ function findKingPins(aH, color) {
                     } else if (pos == 'l' || pos == 'p') {
                         posCM = ['l', 'p']
                     }
-                    // console.log(posCM);
-                    let defendPieceY = cantMove[0]['cell'].attr("class").split(" ")[2][4]
-                    let defendPieceX = cantMove[0]['cell'].attr("class").split(" ")[2][5]
-                    // console.log(defendPieceY,defendPieceX);
+
+                    let defendPieceY = check[1]['cell'].attr("class").split(" ")[2][4]
+                    let defendPieceX = check[1]['cell'].attr("class").split(" ")[2][5]
+
 
                     let posCMARR = []
 
                     posCM.forEach(function (arrCM) {
-                        // console.log(posCM);
+
                         findPiceHodi([defendPieceY, defendPieceX], arrCM, color).forEach(function (fph) {
                             posCMARR.push(fph)
                         })
 
                     })
-                    // console.log(findPiceHodi([defendPieceY,defendPieceX],pos ,color));
 
-                    // console.log(posCMARR);
+
+
+
+
                     let heIsFind = []
                     possibleMoves.forEach(function (idVH) {
-                        // console.log(idVH,'--',posCMARR[0]);
+
                         posCMARR.forEach(function (fph) {
                             if (idVH == fph) {
-                                // console.log('-------------------------');
-                                // console.log(fph);
+
                                 heIsFind.push(fph)
                             }
                         })
 
                     })
 
-                    // console.log(posCMARR);
 
 
 
 
-                    getVHChange(cantMove[0]['cell'], heIsFind)
+
+
+
+                    getVHChange(check[1]['cell'], heIsFind)
 
                 }
 
@@ -1101,59 +1112,55 @@ function findBlockersCheck(startCol, startRow, diff, color) {
     let y = parseInt(startRow);
     let x = parseInt(startCol);
     let figures = [];
-    if (diff == 'nl') {
-        x--;
-        y--;
-    } else if (diff == 'vp') {
-        x++;
-        y++;
-        //sassasa
-    } else if (diff == 'np') {
-        x++;
-        y--;
-    } else if (diff == 'vl') {
-        x--;
-        y++;
-    } else if (diff == 'n') {
-        y--
-    } else if (diff == 'v') {
-        y++
-    } else if (diff == 'l') {
-        x--
-    } else if (diff == 'p') {
-        x++
-    }
-    // console.log(x,y);
+    // if (diff == 'nl') {
+    //     x--;
+    //     y--;
+    // } else if (diff == 'vp') {
+    //     x++;
+    //     y++;
+    //     //sassasa
+    // } else if (diff == 'np') {
+    //     x--;
+    //     y++;
+    // } else if (diff == 'vl') {
+    //     x++;
+    //     y--;
+    // } else if (diff == 'n') {
+    //     x--
+    // } else if (diff == 'v') {
+    //     x++
+    // } else if (diff == 'l') {
+    //     y--
+    // } else if (diff == 'p') {
+    //     y++
+    // }
+    console.log(diff);
+
 
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
+        console.log(x, y);
+
         const cell = $('#id' + x + '' + y);
-        // console.log(cell);
-        // console.log(x,y);
 
         const cellClass = cell.attr('class');
-        // console.log(cell);
+
         if (!cellClass.includes(color + '_king_1')) {
-            // console.log(vozmoznieHodi);
+
             vozmoznieHodi.forEach(function (arr) {
-                // console.log(arr);
+
 
                 arr[0].forEach(function (id) {
-                    // console.log(arr);
 
-
-                    // console.log(arr[1] == color , id[2] == x , id[3] == y);
-
-                    // console.log(x,y);
 
 
                     if (arr[1] == color && arr[2] != 'king' && id[2] == x && id[3] == y) {
-                        console.log('--------------------------------------------------------------------------------');
+
                         figures.push([cell, color, arr[2], arr[3], x, y]);
-                        // break; // Остановиться на первой встреченной фигуре
+
                     }
                 });
             })
-            // break; // Остановиться на первой встреченной фигуре
+
         }
         if (diff == 'nl') {
             x--;
@@ -1161,22 +1168,25 @@ function findBlockersCheck(startCol, startRow, diff, color) {
         } else if (diff == 'vp') {
             x++;
             y++;
+            //sassasa
         } else if (diff == 'np') {
-            x++;
-            y--;
-        } else if (diff == 'vl') {
             x--;
             y++;
+        } else if (diff == 'vl') {
+            x++;
+            y--;
         } else if (diff == 'n') {
-            y--
-        } else if (diff == 'v') {
-            y++
-        } else if (diff == 'l') {
             x--
-        } else if (diff == 'p') {
+        } else if (diff == 'v') {
             x++
+        } else if (diff == 'l') {
+            y--
+        } else if (diff == 'p') {
+            y++
         }
     }
+    console.log(figures);
+
     return figures; // Массив с найденной фигурой (или пустой, если не нашли)
 }
 let kingIsUnderAttack = false
@@ -1193,11 +1203,10 @@ function kingIsNotUnderAttack(color, vH) {
 
 
                     if (index !== -1) {
-                        // console.log('Check');
+
                         kingArr[0].splice(index, 1);
                         getVHChange(king, kingArr[0]);
-                        // kingIsUnderAttack = true
-                        // console.log(vozmoznieHodi);
+
                     }
                 }
             })
@@ -1220,16 +1229,16 @@ function kingIsNotUnderAttack(color, vH) {
                 let diffx = atty - id[2];
                 let diffy = attx - id[3];
                 if (diffx > 0 && diffy > 0) {
-                    // console.log('diagonal');
+
 
                     pos = 'nl'
 
 
                     //Значит это либо слон либо ферзь и король ниже левее
                 } else if (diffx < 0 && diffy < 0) {
-                    // console.log('diagonal');
+
                     pos = 'vp'
-                    // console.log(checkDiagonalCheck([attackPiecePosY,attackPiecePosX],pos ));
+
                     //Значит это либо слон либо ферзь и король выше правее
                 } else if (diffx > 0 && diffy < 0) {
                     pos = 'np'
@@ -1250,9 +1259,9 @@ function kingIsNotUnderAttack(color, vH) {
                     pos = 'p'
                     //Значит это либо ладья либо ферзь и король правее
                 }
-                // console.log(findBlockersCheck(atty,attx,pos,color));
+
                 figures = findBlockersCheck(atty, attx, pos, color);
-                // console.log(pos);
+                // console. (pos);
 
             }
         });
@@ -1262,7 +1271,7 @@ function kingIsNotUnderAttack(color, vH) {
     if (kingIsUnderAttack && figures.length > 0) {
         const allFigures = $(".figure");
         allFigures.each(function (index, element) {
-            // console.log(element);
+
             let figure = $(element);
             let figureClass = figure.attr("class").split(" ")[0].split("_");
 
@@ -1270,19 +1279,28 @@ function kingIsNotUnderAttack(color, vH) {
 
 
             figures.forEach(function (arr) {
-                // console.log(figureClass);
+
 
                 if (!(arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2]) && figureClass[0] == color && figureClass[1] != 'king') {
-                    // figure.attr("class", figureClass[0] + '_' + figureClass[1] + '_' + figureClass[2] + ' figure '+figureCell +' '+ 'cantMove')
-                    // console.log(figureClass);
 
+                    
                     getVHChange(figure, [])
 
 
                 } else if ((arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2]) && figureClass[0] == color && figureClass != [color, 'king', '1']) {
+
                     vH.forEach(function (arrVH) {
                         if (arrVH[1] == arr[1] && arrVH[2] == arr[2] && arrVH[3] == arr[3]) {
-                            arrVH[0] = ['id' + arr[4] + arr[5]]
+                            // $('.' + arrVH[1] + '_' + arrVH[2] + '_' + arrVH[3])
+                            // arrVH[0] = ['id' + arr[4] + arr[5]]
+                            console.log($('.' + arrVH[1] + '_' + arrVH[2] + '_' + arrVH[3]));
+                            
+                            getVHChange($('.' + arrVH[1] + '_' + arrVH[2] + '_' + arrVH[3]), ['id' + arr[4] + arr[5]])
+                            console.log(vozmoznieHodi);
+                            console.log(['id' + arr[4] + arr[5]]);
+                            
+                            console.log(arrVH);
+                            
                         }
                     })
 
@@ -1292,16 +1310,19 @@ function kingIsNotUnderAttack(color, vH) {
         })
     }
     if (kingIsUnderAttack) {
-        // console.log(getVH($('.' + color + '_king_1')));
+
 
 
         if (kingArr[0].length == 0 && figures.length == 0) {
+            // console.log(figures);
+            // console.log(kingArr[0]);
 
             console.log('mate');
 
         }
     }
-
+    
+    
 }
 function checkDiagonalCheckAttack([startCol, startRow], diff, color) {
     let y = parseInt(startRow);
@@ -1328,13 +1349,13 @@ function checkDiagonalCheckAttack([startCol, startRow], diff, color) {
     } else if (diff == 'p') {
         x++
     }
-    // console.log(x,y);
+
 
     while (y >= 1 && x <= 8 && x >= 1 && y <= 8) {
         const cell = $('.cell' + x + y);
         const cellClass = cell.attr('class');
         if (cellClass && isCellOccupied(x, y)) {
-            console.log(cellClass.split(' ')[0].split('_')[0] == color);
+
 
             figures.push({ cell, cellClass, x, y });
             // break; // Остановиться на первой встреченной фигуре
@@ -1406,19 +1427,16 @@ function kingAttack(color) {
                             arr[0].forEach(function (id) {
 
                                 let pos = null
-                                // console.log(attPiece);
 
-                                if (id[2] == attPiece.attr('class').split(' ')[2][4] && id[3] == attPiece.attr('class').split(' ')[2][5]) {
-                                    console.log(arr);
+                                let attPieceCell = [attPiece.attr('class').split(' ')[2][4], attPiece.attr('class').split(' ')[2][5]]
+                                let defPiece = $('.' + arr[1] + '_' + arr[2] + '_' + arr[3])
+                                let defPieceCell = [defPiece.attr('class').split(' ')[2][4], defPiece.attr('class').split(' ')[2][5]]
 
-                                    console.log('-s-s-ss-s-s--=s-s--s--s--s--s-s--s--s-s--s--s--s');
-                                    let attPieceCell = [attPiece.attr('class').split(' ')[2][4], attPiece.attr('class').split(' ')[2][5]]
-                                    let defPiece = $('.' + arr[1] + '_' + arr[2] + '_' + arr[3])
-                                    let defPieceCell = [defPiece.attr('class').split(' ')[2][4], defPiece.attr('class').split(' ')[2][5]]
+                                let diffx = defPieceCell[1] - attPieceCell[1]
+                                let diffy = defPieceCell[0] - attPieceCell[0]
+                                if (id[2] == attPiece.attr('class').split(' ')[2][4] && id[3] == attPiece.attr('class').split(' ')[2][5] && arr[1] != color) {
 
-                                    let diffx = defPieceCell[1] - attPieceCell[1]
-                                    let diffy = defPieceCell[0] - attPieceCell[0]
-                                    // console.log(defPieceCell,attPieceCell);
+
                                     if (diffx > 0 && diffy > 0) {
 
 
@@ -1460,39 +1478,18 @@ function kingAttack(color) {
                                     let figures = []
 
 
+
                                     if (pos) {
 
                                         figures = checkDiagonalCheckAttack([defPieceCell[0], defPieceCell[1]], pos, color)
 
 
+
                                         if (figures[0]) {
-                                            // if (figures[0]['cellClass'].split(' ')[0] == attPiece.attr('class').split(' ')[0]) {
-                                            //     attacked = true;
-                                            //     console.log('fa');
 
-                                            //     let arrHodov = [];
-                                            //     kingMoves.forEach(([rowOffset, colOffset]) => {
-                                            //         const newRow2 = parseInt(currentRow) + rowOffset;
-                                            //         const newCol2 = parseInt(currentCol) + colOffset;
-                                            //         if (!isCellOccupied(newRow2, newCol2)) {
-                                            //             arrHodov.push('id' + newRow2 + newCol2);
-                                            //         }
-                                            //     });
-
-                                            //     vozmoznieHodi.forEach((arr) => {
-                                            //         arr[0].forEach((id) => {
-                                            //             if (arrHodov.indexOf(id) != -1 && arr[1] != color) {
-                                            //                 arrHodov.splice(arrHodov.indexOf(id), 1);
-                                            //             }
-                                            //         });
-                                            //     });
-
-                                            //     getVHChange(king, arrHodov);
-                                            //     return; // ОСТАНОВКА функции kingAttack после fa
-                                            // } else 
                                             if (figures[0]['cellClass'].split(' ')[0] == attPiece.attr('class').split(' ')[0]) {
                                                 attacked = true;
-                                                console.log('fa');
+
 
                                                 let arrHodov = [];
                                                 kingMoves.forEach(([rowOffset, colOffset]) => {
@@ -1518,14 +1515,13 @@ function kingAttack(color) {
                                             if (figures[0]['cellClass'].split(' ')[0] != attPiece.attr('class').split(' ')[0]) {
 
                                                 if (!attacked) {
-                                                    console.log('fe');
+
 
                                                     getVHChange(king, ['id' + attPiece.attr('class').split(' ')[2][4] + attPiece.attr('class').split(' ')[2][5]]);
                                                 }
 
 
                                             }
-                                            console.log(figures);
 
 
 
@@ -1537,12 +1533,12 @@ function kingAttack(color) {
 
                                     }
 
-                                } else if (!attacked) {
-                                    console.log('fe');
+                                } else {
+                                    if (!attacked) {
+                                        getVHChange(king, ['id' + attPiece.attr('class').split(' ')[2][4] + attPiece.attr('class').split(' ')[2][5]]);
+                                    }
 
-                                    getVHChange(king, ['id' + attPiece.attr('class').split(' ')[2][4] + attPiece.attr('class').split(' ')[2][5]]);
                                 }
-
 
 
 

@@ -144,6 +144,7 @@ for (let figure in whitePieces) {
             obrabotchikVsehDvijeni()
             kingAttack('white')
             kingIsNotUnderAttack('white', vozmoznieHodi)
+            findKingPins(allHodi,'black')
             findKingPins(allHodi,'white')
             //    -----------------------------------------------------------------------------------------------
             if (yourTurn == 'white') {
@@ -274,6 +275,7 @@ for (let figure in whitePieces) {
 
 
             kingIsNotUnderAttack('black', vozmoznieHodi)
+            findKingPins(allHodi,'black')
             findKingPins(allHodi,'white')
             
         })
@@ -359,17 +361,13 @@ for (let figure in blackPieces) {
             kingAttack('black')
             kingIsNotUnderAttack('black', vozmoznieHodi)
             findKingPins(allHodi,'black')
+            findKingPins(allHodi,'white')
             //    -----------------------------------------------------------------------------------------------
             if (yourTurn == 'black') {
                 if (pickCords[2]) {
                     
                     
                     let nameCords = pickCords[2].split('_')
-
-
-
-
-
                     let nameOfFigure = figureName.split('_')
 
 
@@ -492,8 +490,8 @@ for (let figure in blackPieces) {
 
 
             kingIsNotUnderAttack('white', vozmoznieHodi)
+            findKingPins(allHodi,'black')
             findKingPins(allHodi,'white')
-            
         })
 
 
