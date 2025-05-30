@@ -15,6 +15,12 @@ $module = $_GET['site'];
         }elseif($module == 'main'){
             $file = 'main';
 
+		}elseif($module == 'play'){
+            $file = 'play';
+
+		}elseif($module == 'settings'){
+            $file = 'settings';
+
 		}else{
 			if(empty($module)) $file = 'regLog';
 			else{

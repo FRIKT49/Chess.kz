@@ -220,7 +220,12 @@ for (let figure in whitePieces) {
 
                                         yourTurn = 'black'
                                         figureClone.attr('class', 'white_' + name + '_' + (i + 1) + ' figure' + ' cell' + pickCords[0] + pickCords[1] + ' moved')
-                                        
+                                        if(name == 'pawn'){
+                                            
+                                            if(checkPawnPromotion(figureClone, $(element))){
+                                                console.log(true);
+                                            }
+                                        }
                                     } else {
                                         figureClone.css({
                                             'left': null,

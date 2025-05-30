@@ -21,3 +21,8 @@
         background-color: rgba(233, 100, 100, 0);
     }
 }
+@keyframes l {
+  to {
+    clip-path: inset(0 -1ch 0 0)
+  }
+}

@@ -4,7 +4,7 @@
     }
    
 
-    dump($_POST);
+
     
     $userInfo = $_POST;
     
@@ -51,7 +51,7 @@
 			
 			$resultUniqEmail = mysqli_query($db, $uniq_email);
 			$resultUniqName = mysqli_query($db, $uniq_name);
-            echo mysqli_num_rows($resultUniqEmail);
+
 			if(mysqli_num_rows($resultUniqEmail) > 0){
 				$error = 'Указанный Вами email адрес уже зарегистрирован на нашем сайте';
 			}

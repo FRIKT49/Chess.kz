@@ -28,10 +28,13 @@ if (!defined('ENGINE')) {
             <div id="logo" class="sideElem">
                 <img src="./img/mainLogo.svg">
             </div>
-            <div id="play" class="sideElem">
-                <img src="./img/play.png">
-                <span>Play</span>
-            </div>
+            <a href="http://diplom/?site=play">
+                <div id="play" class="sideElem">
+                    <img src="./img/play.png">
+                    <span>Play</span>
+                </div>
+            </a>
+            
             <div id="you" class="sideElem">
                 <img src="./img/you.png">
                 <span>You</span>
@@ -59,7 +62,7 @@ if (!defined('ENGINE')) {
                     <img src="./img/schessUserImage.svg" id="userImg"><span><?= $userInfo['userName'] ?></span>
                 </div>
                 <div id="topRight">
-                    <a href=""><img src="./img/settings.png"></a>
+                    <a href="http://diplom/?site=settings"><img src="./img/settings.png"></a>
                 </div>
             </div>
             <div id="playDeck">

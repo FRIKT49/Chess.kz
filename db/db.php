@@ -10,4 +10,5 @@
     ];
 
     $db = mysqli_connect($dbConfig['host'], $dbConfig['user'], $dbConfig['password'], $dbConfig['dbName']);
+    // echo true
 ?>

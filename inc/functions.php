@@ -3,7 +3,9 @@
 		die("Hack no attempt!");
 	}
 	
-
+	function relocationToMain(){
+		header('Location: /?site=main');
+	}
     function dump($var){
         echo "<pre style='position:absolute; top:300px; left:500px; color:white;'>";
 			var_dump($var);
@@ -28,13 +30,12 @@
 		return mysqli_real_escape_string($db, $v);
 	}
 
-	function relocationToMain(){
-		header('Location: /?site=main');
-	}
+	
 	
 	
 	function isLog(){
-		if($_SESSION['id']==null and $_SESSION['name']==null) return false;
+
+		if(count($_SESSION)==0 ) return false;
 		
 		else return true;
 	}

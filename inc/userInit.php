@@ -9,7 +9,7 @@
                 'userName' => $userInfoAssoc['name'],
                 'userEmail' => $userInfoAssoc['email'],
                 'userSt' => $userInfoAssoc['isAdm'],
-                'userRate' => $userInfo['rating'],
+                'userRate' => $userInfoAssoc['rating'],
             ];
             
         }else $error = 'Ошибка базы данных';

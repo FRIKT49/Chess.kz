@@ -17,7 +17,7 @@
     $lowerCaseRegex = "/[a-z]/";
     $rusCaseRegex = "/[А-яа-я]/";
     $numberRegex = "/[0-9]/";    
-    if(isLog()){
+    if(!isLog()){
         if(isPOST()){
             $name = varFilter($userInfo['name']);
             $password = varFilter($userInfo['password']);

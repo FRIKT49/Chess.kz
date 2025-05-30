@@ -897,7 +897,7 @@ function getVHChange(piece, arrvH) {
 
 
             arr[0] = arrvH
-            
+
 
         }
     })
@@ -1283,7 +1283,7 @@ function kingIsNotUnderAttack(color, vH) {
 
                 if (!(arr[1] == figureClass[0] && arr[2] == figureClass[1] && arr[3] == figureClass[2]) && figureClass[0] == color && figureClass[1] != 'king') {
 
-                    
+
                     getVHChange(figure, [])
 
 
@@ -1294,13 +1294,13 @@ function kingIsNotUnderAttack(color, vH) {
                             // $('.' + arrVH[1] + '_' + arrVH[2] + '_' + arrVH[3])
                             // arrVH[0] = ['id' + arr[4] + arr[5]]
                             console.log($('.' + arrVH[1] + '_' + arrVH[2] + '_' + arrVH[3]));
-                            
+
                             getVHChange($('.' + arrVH[1] + '_' + arrVH[2] + '_' + arrVH[3]), ['id' + arr[4] + arr[5]])
                             console.log(vozmoznieHodi);
                             console.log(['id' + arr[4] + arr[5]]);
-                            
+
                             console.log(arrVH);
-                            
+
                         }
                     })
 
@@ -1321,8 +1321,8 @@ function kingIsNotUnderAttack(color, vH) {
 
         }
     }
-    
-    
+
+
 }
 function checkDiagonalCheckAttack([startCol, startRow], diff, color) {
     let y = parseInt(startRow);
@@ -1570,4 +1570,182 @@ function deletePiece(piece) {
 
 }
 
+function promotePawnToQueen(pawn, targetCell) {
+    // Получаем цвет пешки
+    const pawnColor = pawn.attr("class").split("_")[0];
+    console.log(`url(img/${pawnColor[0]}q.png)`);
 
+    // Создаем нового ферзя
+    const queen = $('<div>', {
+        class: `${pawnColor}_queen_1 figure ${targetCell.attr('id')}`,
+        css: {
+            position: 'absolute',
+            left: getCell(targetCell.attr('id')[3], "y") + "px",
+            bottom: getCell(targetCell.attr('id')[2], "x") + "px",
+            width: cellWidth + "px",
+            height: cellHeight + "px",
+            backgroundImage: `url(../img/${pawnColor[0]}q.png)`,
+            backgroundSize: "contain",
+            backgroundRepeat: "no-repeat",
+            backgroundPosition: "center",
+            zIndex: "1"
+        }
+    });
+    let figureName = pawnColor + '_queen_2'
+    // Удаляем пешку
+    pawn.remove();
+
+    queen.on('mousedown', function (pos) {
+        mouseXPos = pos.clientX
+        mouseYPos = pos.clientY
+        isPick = true
+        pickFigure = pawnColor + '_queen_2';
+
+        $('body').on('mousemove', function (move) {
+            const mouseX = move.clientX;
+            const mouseY = move.clientY;
+
+            $('.figure').css({
+                'pointer-events': 'none',
+                'z-index': 9
+            })
+            queen.css({
+                'z-index': 99999
+            })
+            queen.css({
+                'position': 'fixed',
+                'bottom': ($('body').height() - mouseY) - cellHeight / 2 + 'px',
+                'left': mouseX - cellWidth / 2 + 'px',
+            })
+        })
+
+        // ВСТАВЛЯЕМ ОБРАБОТЧИК mouseup
+        $('body').on('mouseup', function () {
+            queen.css({
+                'pointer-events': 'auto',
+                'position': 'absolute',
+                'z-index': 1,
+            })
+            obrabotchikVozmoznichDvijeni()
+            obrabotchikVsehDvijeni()
+            kingAttack('white')
+            kingIsNotUnderAttack('white', vozmoznieHodi)
+            findKingPins(allHodi, 'black')
+            findKingPins(allHodi, 'white')
+            let nameOfFigure = figureName.split('_')
+            // --- Здесь можно добавить свою логику для queen, если нужно ---
+            $('.cell').each(function (index, element) {
+                var figureCellCordsx = queen.attr('class').split(' ')[2][4];
+                var figureCellCordsy = queen.attr('class').split(' ')[2][5];
+
+                if ($(element).attr('id')[2] == pickCords[0] && $(element).attr('id')[3] == pickCords[1]) {
+
+
+                    console.log('sadadsadsadsa');
+
+                    if (canIMove(figureCellCordsx, figureCellCordsy, pickCords[1], pickCords[0], nameOfFigure[0], nameOfFigure[1], 2, vozmoznieHodi, queen)) {
+                        playOnce()
+
+
+                        if (!(figureCellCordsx == $(element).attr('id')[2] && figureCellCordsy == $(element).attr('id')[3])) {
+                            // $('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]).css({
+                            //     'display': 'none'
+                            // });
+                            deletePiece($('.cell' + $(element).attr('id')[2] + $(element).attr('id')[3]))
+
+
+
+                            $(element).attr('class', 'cell' + ' ' + 'cell_white_' + 'queen' + '_' + (i + 1))
+
+                            $('#id' + figureCellCordsx + figureCellCordsy).attr('class', 'cell');/////////////////////////////////////////////////////
+
+
+
+                            queen.css({
+                                'left': null,
+                                'bottom': '0px',
+                            })
+                            queen.css({
+
+                                'left': getCell(pickCords[1], 'x') + 'px',
+                                'bottom': getCell(pickCords[0], 'y') + 'px',
+
+
+
+                            })
+                            
+                            
+
+                        } else {
+                            queen.css({
+                                'left': null,
+                                'bottom': '0px',
+                            })
+                            queen.css({
+
+                                'left': getCell(figureCellCordsy, 'x') + 'px',
+                                'bottom': getCell(figureCellCordsx, 'y') + 'px',
+
+
+
+                            })
+
+
+                        }
+
+                        yourTurn = 'black'
+                        queen.attr('class', 'white_' + 'queen' + '_' + (i + 1) + ' figure' + ' cell' + pickCords[0] + pickCords[1] + ' moved')
+                        
+                    } else {
+                        queen.css({
+                            'left': null,
+                            'bottom': '0px',
+                        })
+                        queen.css({
+
+                            'left': getCell(figureCellCordsy, 'x') + 'px',
+                            'bottom': getCell(figureCellCordsx, 'y') + 'px',
+
+
+
+                        })
+                    }
+
+                }
+
+
+
+            })
+            $('body').off('mousemove')
+            kingIsNotUnderAttack('black', vozmoznieHodi)
+            findKingPins(allHodi, 'black')
+            findKingPins(allHodi, 'white')
+        })
+    })
+
+    // Добавляем ферзя на доску
+    $("#deck").append(queen);
+
+    // Обновляем класс целевой клетки
+    targetCell.attr("class", `cell cell_${pawnColor}_queen_1`);
+
+    // Обновляем возможные ходы
+    obrabotchikVozmoznichDvijeni();
+
+    // Воспроизводим звук превращения
+    playOnce();
+}
+
+// Функция проверки возможности превращения пешки
+function checkPawnPromotion(pawn, targetCell) {
+    const pawnColor = pawn.attr("class").split("_")[0];
+    const targetRow = parseInt(targetCell.attr('id')[2]);
+
+    // Проверяем, достигла ли пешка последней горизонтали
+    if ((pawnColor === 'white' && targetRow === 8) ||
+        (pawnColor === 'black' && targetRow === 1)) {
+        promotePawnToQueen(pawn, targetCell);
+        return true;
+    }
+    return false;
+}
